@@ -90,11 +90,11 @@ const ProjectDetail: React.FC = () => {
         transition={{ duration: 1 }}
         className="px-6 md:px-0"
       >
-        <div className="w-full h-[70vh] md:h-[110vh] bg-brand-gray overflow-hidden md:rounded-none rounded-2xl">
+        <div className="w-full bg-brand-gray md:rounded-none rounded-2xl">
           <img 
             src={project.imageUrl} 
             alt={project.title} 
-            className="w-full h-full object-cover"
+            className="w-full h-auto object-contain"
           />
         </div>
       </motion.section>

@@ -24,16 +24,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) =>
       onClick={() => onClick(project)}
       className="group relative block w-full overflow-hidden mb-12 cursor-pointer"
     >
-      <div className="relative aspect-[4/5] md:aspect-[16/11] overflow-hidden bg-zinc-900">
+      <div className="relative w-full overflow-hidden bg-zinc-900">
         <motion.div 
-          className="w-full h-full"
+          className="w-full"
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.8, ease: [0.33, 1, 0.68, 1] }}
         >
           <img 
             src={project.imageUrl} 
             alt={project.title}
-            className="w-full h-full object-cover transition-all duration-700 ease-out"
+            className="w-full h-auto object-cover transition-all duration-700 ease-out"
           />
         </motion.div>
         

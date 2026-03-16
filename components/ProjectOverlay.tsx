@@ -103,11 +103,11 @@ const ProjectOverlay: React.FC<ProjectOverlayProps> = ({ project, onClose }) => 
                 </div>
               </header>
 
-              <div className="w-full aspect-video bg-zinc-900 overflow-hidden rounded-xl mb-20">
+              <div className="w-full bg-zinc-900 rounded-xl mb-20">
                 <img 
                   src={project.imageUrl} 
                   alt={project.title} 
-                  className="w-full h-full object-cover"
+                  className="w-full h-auto object-contain"
                 />
               </div>
 
