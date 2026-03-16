@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PortfolioItem } from '../types';
 import { X, Globe, ArrowRight, ArrowUpRight } from 'lucide-react';
+import OptimizedImage from './OptimizedImage';
 
 interface ProjectOverlayProps {
   project: PortfolioItem | null;
@@ -104,10 +105,13 @@ const ProjectOverlay: React.FC<ProjectOverlayProps> = ({ project, onClose }) => 
               </header>
 
               <div className="w-full bg-zinc-900 rounded-xl mb-20">
-                <img 
-                  src={project.imageUrl} 
-                  alt={project.title} 
+                <OptimizedImage
+                  src={project.imageUrl}
+                  alt={project.title}
                   className="w-full h-auto object-contain"
+                  preload={true}
+                  retryCount={3}
+                  loading="eager"
                 />
               </div>
 

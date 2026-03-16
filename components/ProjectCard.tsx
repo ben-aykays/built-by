@@ -3,6 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { PortfolioItem } from '../types';
 import { ArrowUpRight } from 'lucide-react';
+import OptimizedImage from './OptimizedImage';
 
 interface ProjectCardProps {
   project: PortfolioItem;
@@ -30,10 +31,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) =>
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.8, ease: [0.33, 1, 0.68, 1] }}
         >
-          <img 
-            src={project.imageUrl} 
+          <OptimizedImage
+            src={project.imageUrl}
             alt={project.title}
             className="w-full h-auto object-cover transition-all duration-700 ease-out"
+            preload={true}
+            retryCount={3}
+            loading="lazy"
           />
         </motion.div>
         

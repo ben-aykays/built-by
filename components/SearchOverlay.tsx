@@ -1,29 +1,37 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Search as SearchIcon, ArrowRight, Command } from 'lucide-react';
+import { PortfolioItem } from '../types';
+import OptimizedImage from './OptimizedImage';
 
 interface SearchOverlayProps {
   isOpen: boolean;
   onClose: () => void;
   onSearch: (query: string) => void;
+  searchQuery: string;
+  projects: PortfolioItem[];
 }
 
-const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, onSearch }) => {
-  const [query, setQuery] = useState('');
+const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, onSearch, searchQuery, projects }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 10);
-    } else {
-      setQuery('');
     }
   }, [isOpen]);
 
-  useEffect(() => {
-    onSearch(query);
-  }, [query, onSearch]);
+  const results = useMemo(() => {
+    const q = (searchQuery || '').trim().toLowerCase();
+    if (!q) return [];
+    const filtered = projects.filter(p =>
+      p.title.toLowerCase().includes(q) ||
+      p.shortDescription.toLowerCase().includes(q) ||
+      p.categories.some(c => (c || '').toLowerCase().includes(q))
+    );
+    return filtered.slice(0, 8);
+  }, [projects, searchQuery]);
 
   const handleResultClick = () => {
     onClose();
@@ -55,8 +63,13 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, onSearch
                 ref={inputRef}
                 type="text"
                 placeholder="Search projects, categories..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                value={searchQuery}
+                onChange={(e) => onSearch(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    onClose();
+                  }
+                }}
                 className="flex-1 bg-transparent text-xl font-light focus:outline-none placeholder:text-white/30 text-white"
               />
               <div className="flex items-center gap-3">
@@ -75,29 +88,55 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, onSearch
 
             {/* Results List */}
             <div className="max-h-[50vh] overflow-y-auto custom-scrollbar">
-              {query && (
-                <div className="p-16 text-center">
-                  <p className="text-zinc-500 text-lg font-light italic">
-                    Results update in the grid below.
-                  </p>
-                  <button
-                    onClick={handleResultClick}
-                    className="mt-6 inline-flex items-center gap-3 px-6 py-3 rounded-full border border-white/10 hover:border-white/30 hover:bg-white/5 text-[11px] uppercase tracking-[0.3em] text-white/70 transition-all"
-                  >
-                    Close
-                    <ArrowRight size={14} />
-                  </button>
+              {searchQuery && results.length > 0 && (
+                <div className="divide-y divide-white/5">
+                  {results.map(item => (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        window.location.hash = `#/project/${item.id}`;
+                        onClose();
+                      }}
+                      className="group w-full flex items-center gap-4 px-6 py-4 hover:bg-white/5 transition-colors text-left"
+                    >
+                      {item.imageUrl ? (
+                        <OptimizedImage
+                          src={item.imageUrl}
+                          alt={item.title}
+                          className="w-12 h-12 rounded object-cover border border-white/10"
+                          preload={false}
+                          retryCount={2}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 rounded bg-white/5 border border-white/10" />
+                      )}
+                      <div className="flex-1">
+                        <div className="font-medium text-white group-hover:text-white">{item.title}</div>
+                        <div className="text-xs uppercase tracking-[0.2em] text-white/50">
+                          {item.categories.join(' • ')}
+                        </div>
+                      </div>
+                      <ArrowRight size={14} className="text-white/40 group-hover:text-white/80 transition-colors" />
+                    </button>
+                  ))}
+                </div>
+              )}
+              {searchQuery && results.length === 0 && (
+                <div className="p-12 text-center text-zinc-500">
+                  <div className="text-lg font-light italic mb-3">No results found.</div>
+                  <div className="text-sm">Try another keyword or choose a suggestion.</div>
                 </div>
               )}
 
-              {!query && (
+              {!searchQuery && (
                 <div className="p-8">
                   <div className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold mb-6">Suggestions</div>
                   <div className="grid grid-cols-2 gap-3">
                     {['Photography', 'Development', 'Design', 'Branding', 'Luxury', 'E-commerce'].map(tag => (
                       <button 
                         key={tag}
-                        onClick={() => setQuery(tag)}
+                        onClick={() => { onSearch(tag); onClose(); }}
                         className="flex items-center justify-between p-4 rounded-xl border border-white/5 hover:border-white/20 bg-white/0 hover:bg-white/5 text-sm text-zinc-400 hover:text-white transition-all text-left"
                       >
                         <span className="uppercase tracking-widest">{tag}</span>

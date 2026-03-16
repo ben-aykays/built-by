@@ -44,8 +44,8 @@ const Footer: React.FC = () => {
       </div>
 
       <div className="flex flex-col md:flex-row justify-between items-center border-t border-white/10 pt-12 text-[10px] uppercase tracking-widest text-white/40">
-        <p>© 2024 Aykays — All rights reserved.</p>
-        <p className="mt-4 md:mt-0">Built with precision and passion.</p>
+        <p>© 2026 Aykays — All rights reserved.</p>
+        <a href="https://builtby.aykays.com" target="_blank" rel="noopener noreferrer" className="mt-4 md:mt-0 hover:text-white transition-colors">A project by builtby.aykays.com</a>
       </div>
     </footer>
   );

@@ -12,9 +12,10 @@ const categories = ['All', 'Photography', 'Development', 'Design', 'Branding'] a
 interface HomeProps {
   searchQuery: string;
   onClearSearch: () => void;
+  allProjects?: PortfolioItem[];
 }
 
-const Home: React.FC<HomeProps> = ({ searchQuery, onClearSearch }) => {
+const Home: React.FC<HomeProps> = ({ searchQuery, onClearSearch, allProjects: incomingProjects }) => {
   const [activeCategory, setActiveCategory] = useState<typeof categories[number]>('All');
   const [selectedProject, setSelectedProject] = useState<PortfolioItem | null>(null);
   const [remoteProjects, setRemoteProjects] = useState<PortfolioItem[]>([]);
@@ -171,14 +172,17 @@ const Home: React.FC<HomeProps> = ({ searchQuery, onClearSearch }) => {
   }, []);
 
   const allProjects = useMemo(() => {
-    return remoteProjects;
-  }, [remoteProjects]);
+    return (incomingProjects && incomingProjects.length > 0) ? incomingProjects : remoteProjects;
+  }, [incomingProjects, remoteProjects]);
 
   const filteredProjects = useMemo(() => {
     let results = allProjects;
     
     if (activeCategory !== 'All') {
-      results = results.filter(p => p.categories.includes(activeCategory));
+      const ac = activeCategory.toLowerCase();
+      results = results.filter(p => 
+        p.categories.some(c => (c || '').toLowerCase().includes(ac))
+      );
     }
     
     if (searchQuery.trim() !== '') {
@@ -353,10 +357,10 @@ const Home: React.FC<HomeProps> = ({ searchQuery, onClearSearch }) => {
           Ready to <br /><span className="text-outline italic">evolve?</span>
         </h2>
         <a 
-          href="mailto:hello@agency.com" 
+          href="mailto:hello@aykays.com" 
           className="group relative inline-flex items-center gap-6 text-2xl md:text-4xl font-light hover:text-zinc-400 transition-colors"
         >
-          hello@agency.com
+          hello@aykays.com
           <div className="p-4 rounded-full border border-white/20 group-hover:bg-white group-hover:text-black transition-all rotate-45 group-hover:rotate-0">
              <ArrowRight size={24} />
           </div>

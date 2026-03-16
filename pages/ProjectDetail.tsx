@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { portfolioData } from '../data';
 // Added ArrowUpRight to the imports from lucide-react
 import { ArrowLeft, Globe, ArrowRight, ArrowUpRight } from 'lucide-react';
+import OptimizedImage from '../components/OptimizedImage';
 
 const ProjectDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -91,10 +92,13 @@ const ProjectDetail: React.FC = () => {
         className="px-6 md:px-0"
       >
         <div className="w-full bg-brand-gray md:rounded-none rounded-2xl">
-          <img 
-            src={project.imageUrl} 
-            alt={project.title} 
+          <OptimizedImage
+            src={project.imageUrl}
+            alt={project.title}
             className="w-full h-auto object-contain"
+            preload={true}
+            retryCount={3}
+            loading="eager"
           />
         </div>
       </motion.section>
@@ -122,10 +126,13 @@ const ProjectDetail: React.FC = () => {
         className="group block relative h-[80vh] w-full overflow-hidden"
       >
         <div className="absolute inset-0 bg-zinc-900 overflow-hidden">
-           <img 
-             src={nextProject.imageUrl} 
-             alt="Next project" 
-             className="w-full h-full object-cover opacity-30 grayscale group-hover:scale-105 group-hover:grayscale-0 group-hover:opacity-60 transition-all duration-1000 ease-out" 
+           <OptimizedImage
+             src={nextProject.imageUrl}
+             alt="Next project"
+             className="w-full h-full object-cover opacity-30 grayscale group-hover:scale-105 group-hover:grayscale-0 group-hover:opacity-60 transition-all duration-1000 ease-out"
+             preload={false}
+             retryCount={2}
+             loading="lazy"
            />
         </div>
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
