@@ -35,7 +35,7 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-[10px] uppercase tracking-[0.5em] text-white/40 mb-6">Office</h4>
             <ul className="space-y-4 text-sm font-light text-white/60">
-              <li>US Based Agency </li>
+              <li>US Based Agency. </li>
               {/* <li>Row 7, Block 10-A, </li>
               <li>Gulshan-e-Iqbal, Karachi.</li> */}
             </ul>
