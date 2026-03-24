@@ -59,7 +59,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, onSearch
             {/* Spotlight Header */}
             <div className="flex items-center px-6 py-5 border-b border-white/10">
               <SearchIcon className="text-white/40 mr-4" size={22} />
-              <input 
+              <input    
                 ref={inputRef}
                 type="text"
                 placeholder="Search projects, categories..."
